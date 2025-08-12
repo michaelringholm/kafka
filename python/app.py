@@ -61,7 +61,45 @@ def setup_logging():
         datefmt="%H:%M:%S"
     )
 
-def produce():
+def produce(acks='all', message_key=None):
+    """
+    Sends messages to a Kafka topic with configurable acks and key.
+
+    Args:
+        acks (str): Acknowledgment level. Options: '0', '1', 'all'
+        message_key (str or None): Key used for message partitioning. Must be bytes or convertible to bytes.
+    """
+    logging.info(f"🚀 Starting Kafka producer with acks='{acks}'...")
+
+    # Initialize producer with custom acks
+    producer = KafkaProducer(
+        bootstrap_servers=OPTIONS.BOOTSTRAP_SERVERS,
+        acks=acks,
+        value_serializer=lambda v: v.encode('utf-8'),
+        key_serializer=lambda k: k.encode('utf-8') if k else None
+    )
+    logging.info(f"📡 Connected to Kafka broker at {OPTIONS.BOOTSTRAP_SERVERS}")
+
+    # Define messages to send
+    messages = ['Hello Kafka 👋', 'Processing event ✅', 'Final message 🚀']
+
+    for i, msg in enumerate(messages, 1):
+        key = message_key if message_key else None
+        producer.send(
+            OPTIONS.TOPIC,
+            key=key,
+            value=msg
+        )
+        logging.info(f"📨 Sent message {i}: '{msg}' {f'(key={message_key})' if message_key else ''}")
+        time.sleep(1)
+
+    producer.flush()
+    logging.info("✅ All messages sent and flushed.")
+    producer.close()
+    logging.info("🔒 Producer connection closed.")
+
+
+def produce_older():
     # Initialize producer
     producer = KafkaProducer(bootstrap_servers='localhost:9092')
     logging.info("Connected to Kafka broker at localhost:9092")
@@ -103,6 +141,42 @@ def consume():
         consumer.close()
         logging.info("Consumer closed.")
 
+def consume_with_dedup():
+    logging.basicConfig(
+        level=logging.INFO,
+        format="🔵 CONSUMER | %(asctime)s | %(levelname)s: %(message)s",
+        datefmt="%H:%M:%S"
+    )
+
+    consumer = KafkaConsumer(
+        OPTIONS.TOPIC,
+        bootstrap_servers=OPTIONS.BOOTSTRAP_SERVERS,
+        auto_offset_reset='earliest',
+        enable_auto_commit=True,
+        group_id='dedup-group',
+        key_deserializer=lambda k: k.decode('utf-8') if k else None,
+        value_deserializer=lambda v: v.decode('utf-8')
+    )
+
+    seen_keys = set()  # or load from a database/cache for durability
+
+    logging.info("📥 Started consuming messages with deduplication...")
+    for message in consumer:
+        key = message.key
+        value = message.value
+
+        if key in seen_keys:
+            logging.info(f"🛑 Skipped duplicate message with key='{key}'")
+            continue  # Skip already seen keys
+
+        # Process the message
+        logging.info(f"✅ Processing message with key='{key}': {value}")
+
+        # Mark key as seen
+        seen_keys.add(key)
+
+        # Simulate processing
+        # process_message(key, value)
 
 
 def old_produce():

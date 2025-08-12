@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:m="https://www.example.org/stock"
+    targetNamespace="http://schemas.xmlsoap.org/soap/envelope/"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+  <!-- Import stock schema -->
+  <xs:import namespace="https://www.example.org/stock" schemaLocation="stock.xsd"/>
+
+  <xs:element name="Envelope" type="soapenv:EnvelopeType"/>
+
+  <xs:complexType name="EnvelopeType">
+    <xs:sequence>
+      <xs:element name="Header" minOccurs="0" type="xs:anyType"/>
+      <xs:element name="Body" type="soapenv:BodyType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="BodyType">
+    <xs:sequence>
+      <!-- Reference GetPrice element in stock namespace -->
+      <xs:element ref="m:GetPrice"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

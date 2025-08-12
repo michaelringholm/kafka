@@ -1,0 +1,24 @@
+services:
+  # Controller for DC2
+  kafka-controller2:
+    image: confluentinc/cp-kafka:7.8.0
+    hostname: kafka-controller2
+    # ... other configurations
+    environment:
+      KAFKA_NODE_ID: 2
+      KAFKA_PROCESS_ROLES: controller
+      KAFKA_BROKER_RACK: dc2
+      KAFKA_CONTROLLER_RACK: dc2
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka-controller1:9093,2@kafka-controller2:9093,3@kafka-controller3:9093'
+      # ... other environment variables
+  # Broker for DC2
+  kafka-broker2:
+    image: confluentinc/cp-kafka:7.8.0
+    hostname: kafka-broker2
+    # ... other configurations
+    environment:
+      KAFKA_NODE_ID: 5
+      KAFKA_PROCESS_ROLES: broker
+      KAFKA_BROKER_RACK: dc2
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka-controller1:9093,2@kafka-controller2:9093,3@kafka-controller3:9093'
+      # ... other environment variables
