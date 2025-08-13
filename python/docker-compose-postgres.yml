@@ -1,0 +1,23 @@
+# docker-compose-postgres.yml
+# This file initializes a PostgreSQL database with Docker Compose.
+
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: kafka_sql_user
+      POSTGRES_PASSWORD: kafka_demo
+      POSTGRES_DB: kafka_demo_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+# Named volume definition
+volumes:
+  postgres_data:
+
+# To run this and make it available via Docker Desktop, run:
+# docker-compose -f docker-compose-postgres.yml up -d
