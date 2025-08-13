@@ -1,1 +1,1 @@
-streamlit run app.py --server.address 0.0.0.0 --server.port 5051
+streamlit run kafka_explorer.py --server.address localhost --server.port 5051
