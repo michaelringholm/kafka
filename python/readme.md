@@ -17,8 +17,12 @@ pip install kafka-python
 #   wurstmeister/kafka:latest
 
 # run kafka
-docker-compose up -d
+# docker-compose up -d
+docker-compose -f docker-compose.yml up -d
 Make sure Kafka is running on localhost:9092
+
+# run postgres
+docker-compose -f docker-compose-postgres.yml up -d
 
 # check it is running
 docker ps

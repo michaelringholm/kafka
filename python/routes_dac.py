@@ -1,5 +1,4 @@
 import psycopg2
-import json
 import logging
 
 # Logging with emoji

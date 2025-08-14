@@ -12,6 +12,7 @@
 #
 
 import logging
+import os
 import time
 import sys
 import emoji
@@ -26,6 +27,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
+logging.getLogger("kafka").setLevel(logging.WARNING) # suppress kafka library logs
 
 # Define some emojis for different log levels
 EMOJI_INFO = emoji.emojize(":information:")
@@ -161,6 +163,7 @@ def kafka_consumer_performance_test(
     consumer.close()
 
 if __name__ == "__main__":
+    os.system('cls')  # Clear console for a fresh start
     # The topic name should match the one used by the producer script.
     kafka_consumer_performance_test(
         topic_name='perf-test'

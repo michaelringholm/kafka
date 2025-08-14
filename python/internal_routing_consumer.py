@@ -11,20 +11,6 @@ import routes_dac
 class OPTIONS:
     KAFKA_BROKER = "localhost:9092"
     SOURCE_TOPIC = "quotes-topic"
-    # ROUTING_MATRIX = [
-    #     {
-    #         "xpath": "//stk:StockName",
-    #         "ns": {"stk": "https://www.example.org/stock"},
-    #         "value": "IBM",
-    #         "dest_topic": "ibm-topic"
-    #     },
-    #     {
-    #         "xpath": "//stk:StockName",
-    #         "ns": {"stk": "https://www.example.org/stock"},
-    #         "value": "AAPL",
-    #         "dest_topic": "apple-topic"
-    #     }
-    # ]
     ROUTING_MATRIX = routes_dac.fetch_routing_matrix() 
     FLASK_HOST = "0.0.0.0"
     FLASK_PORT = 5001

@@ -1,1 +1,1 @@
-venv\Scripts\activate (Windows)
+venv\Scripts\activate.ps1

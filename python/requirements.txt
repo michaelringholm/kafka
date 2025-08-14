@@ -1,0 +1,9 @@
+kafka-python
+flask
+lxml
+xmltodict
+xmldiff
+psycopg2
+pytest
+emoji
+streamlit

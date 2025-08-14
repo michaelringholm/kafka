@@ -28,6 +28,12 @@ ROUTES_DATA = [
         "ns": {"stk": "https://www.example.org/stock"},
         "value": "AAPL",
         "dest_topic": "apple-topic"
+    },
+    {
+        "xpath": "//stk:StockName",
+        "ns": {"stk": "https://www.example.org/stock"},
+        "value": "ASUS",
+        "dest_topic": "asus-topic"
     }
 ]
 
@@ -67,6 +73,16 @@ def insert_routes(conn, routes):
     cur.close()
     INFO("Data insertion completed ✅")
 
+# Clear the table before inserting new data
+def clear_routes(conn):
+    INFO("Clearing 'routes' table...")
+    cur = conn.cursor()
+    cur.execute("DELETE FROM routes")
+    conn.commit()
+    cur.close()
+    INFO("Table cleared ✅")
+
+
 def read_routes(conn):
     INFO("Reading routes data...")
     cur = conn.cursor()
@@ -81,6 +97,7 @@ def main():
     conn = get_connection()
     try:
         create_table(conn)
+        clear_routes(conn) 
         insert_routes(conn, ROUTES_DATA)
         read_routes(conn)
     finally:

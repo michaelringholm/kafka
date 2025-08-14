@@ -13,6 +13,7 @@
 #
 
 import logging
+import os
 import time
 import sys
 import emoji
@@ -26,6 +27,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
+logging.getLogger("kafka").setLevel(logging.WARNING) # suppress kafka library logs
 
 # Define some emojis for different log levels
 EMOJI_INFO = emoji.emojize(":information:")
@@ -115,7 +117,8 @@ def kafka_producer_performance_test(
         # acks=0 (default) provides highest throughput, lowest durability.
         # acks=1 for leader acknowledgment.
         # acks='all' for all in-sync replica acknowledgments (highest durability).
-        'acks': 'all'
+        'acks': 'all',
+        'max_in_flight_requests_per_connection': 1  # Limits the number of unacknowledged requests the client will send before blocking
     }
 
     try:
@@ -169,10 +172,12 @@ def kafka_producer_performance_test(
     p.close()
 
 if __name__ == "__main__":
+    # start by clearing the console log
+    os.system('cls')
     # Example usage:
     # Test with 10,000 messages of 1 KB each
     kafka_producer_performance_test(
-        num_messages=10000,
+        num_messages=10,
         message_size_kb=10
     )
 
