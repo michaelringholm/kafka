@@ -28,3 +28,10 @@ docker-compose -f docker-compose-postgres.yml up -d
 docker ps
 
 run the app
+
+# build docker/podman image for flask app
+docker build -f soap_flask_adapter.Dockerfile -t soap-flask-adapter .
+
+
+# run soap flask adapter
+py -m flask run

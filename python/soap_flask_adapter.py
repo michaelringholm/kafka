@@ -32,7 +32,14 @@ log = logging.getLogger(__name__)
 app = Flask(__name__)
 log = logging.getLogger(__name__)
 
+def init_schema():
+    schema_doc = ET.parse(OPTIONS.XSD_SCHEMA_PATH)
+    app.schema = ET.XMLSchema(schema_doc)
+
+@app.before_request
 def create_app():
+    log.info("🚀 Initializing Flask SOAP adapter on before_request signal...")
+    init_schema()
     app.producer = KafkaProducer(
         bootstrap_servers=OPTIONS.KAFKA_BROKER,
         value_serializer=lambda v: v.encode("utf-8"),
@@ -41,8 +48,8 @@ def create_app():
         # If you use multiple producers or send to multiple partitions, duplicates may still occur.
         enable_idempotence=True # Ensures no duplicate messages are sent within the same prodcer session for a given partition
     )
-    schema_doc = ET.parse(OPTIONS.XSD_SCHEMA_PATH)
-    app.schema = ET.XMLSchema(schema_doc)
+    #schema_doc = ET.parse(OPTIONS.XSD_SCHEMA_PATH)
+    #app.schema = ET.XMLSchema(schema_doc)
 
 
 # -----------------------------------

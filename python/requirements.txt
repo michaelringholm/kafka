@@ -3,7 +3,8 @@ flask
 lxml
 xmltodict
 xmldiff
-psycopg2
+#psycopg2
+psycopg2-binary
 pytest
 emoji
 streamlit
