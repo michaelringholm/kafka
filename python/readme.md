@@ -32,6 +32,8 @@ run the app
 # build docker/podman image for flask app
 docker build -f soap_flask_adapter.Dockerfile -t soap-flask-adapter .
 
-
 # run soap flask adapter
-py -m flask run
+$env:FLASK_APP = "soap_flask_adapter.py" | flask run
+$env:PYTHONPATH = "D:\github\kafka-demo\python"; $env:FLASK_APP = "internal_routing_consumer.py"; flask run --no-reload
+
+# run streamlit app

@@ -1,9 +1,10 @@
 import logging
 import threading
-from flask import Flask, Response
+from flask import Flask, request, Response
 from kafka import KafkaConsumer, KafkaProducer
 import lxml.etree as ET
 import routes_dac
+# import via local syntax for local py modules path thingy
 
 # =========================
 # CONFIGURATION
@@ -25,12 +26,12 @@ logging.basicConfig(
 logging.getLogger("kafka").setLevel(logging.WARNING)
 log = logging.getLogger(__name__)
 
+app = Flask(__name__)
+
 # =========================
 # FLASK APP FACTORY
 # =========================
 def create_app():
-    app = Flask(__name__)
-
     # Init Kafka Producer
     app.producer = KafkaProducer(
         bootstrap_servers=OPTIONS.KAFKA_BROKER,
@@ -38,14 +39,13 @@ def create_app():
     )
 
     # Start background consumer thread
-    threading.Thread(target=consume_and_route, daemon=True).start()
-
-    # Health endpoint
-    @app.route("/health", methods=["GET"])
-    def health():
-        return Response("OK", status=200)
-
+    threading.Thread(target=consume_and_route, daemon=False).start()
     return app
+
+# Health endpoint
+@app.route("/health", methods=["GET"])
+def health():
+    return Response("OK", status=200)
 
 def consume_and_route():
         consumer = KafkaConsumer(
@@ -87,4 +87,4 @@ def consume_and_route():
 # =========================
 if __name__ == "__main__":
     app = create_app()
-    app.run(host=OPTIONS.FLASK_HOST, port=OPTIONS.FLASK_PORT)
+    app.run(host=OPTIONS.FLASK_HOST, port=OPTIONS.FLASK_PORT, use_reloader=False)

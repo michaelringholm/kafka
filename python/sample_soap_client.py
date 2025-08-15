@@ -10,18 +10,9 @@ logging.basicConfig(
 
 SOAP_ENDPOINT = "http://localhost:5000/soap"  # Change to your endpoint
 
-# Sample SOAP request XML
-soap_request = """<?xml version="1.0"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                  xmlns:stk="https://www.example.org/stock">
-   <soapenv:Header/>
-   <soapenv:Body>
-      <stk:GetPrice>
-         <stk:StockName>ASUS</stk:StockName>
-      </stk:GetPrice>
-   </soapenv:Body>
-</soapenv:Envelope>
-"""
+# Read a sample SOAP XML request from a file
+with open("./xml/sample_soap_client_request.xml", "r") as file:
+    soap_request = file.read()
 
 headers = {
     "Content-Type": "text/xml; charset=utf-8",

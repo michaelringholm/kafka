@@ -28,9 +28,7 @@ logging.basicConfig(
 logging.getLogger("kafka").setLevel(logging.WARNING)
 log = logging.getLogger(__name__)
 
-
 app = Flask(__name__)
-log = logging.getLogger(__name__)
 
 def init_schema():
     schema_doc = ET.parse(OPTIONS.XSD_SCHEMA_PATH)

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:stk="https://www.example.org/stock">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <stk:GetPrice>
+         <stk:StockName>ASUS</stk:StockName>
+      </stk:GetPrice>
+   </soapenv:Body>
+</soapenv:Envelope>
