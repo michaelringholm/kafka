@@ -5,8 +5,8 @@ python -m venv venv
 source venv/bin/activate (Linux/Mac)
 venv\Scripts\activate (Windows)
 
-create python venvironment and install kafka-python
-pip install kafka-python
+# install all required modules
+pip install -r requirements.txt
 
 # Download and run Kafka locally on docker
 # docker run -d --name kafka -p 9092:9092 \
@@ -32,8 +32,12 @@ run the app
 # build docker/podman image for flask app
 docker build -f soap_flask_adapter.Dockerfile -t soap-flask-adapter .
 
-# run soap flask adapter
-$env:FLASK_APP = "soap_flask_adapter.py" | flask run
+# run flask adapter
+$env:PYTHONPATH = "D:\github\kafka-demo\python"; $env:FLASK_APP = "stock_adapter.py"; flask run
 $env:PYTHONPATH = "D:\github\kafka-demo\python"; $env:FLASK_APP = "internal_routing_consumer.py"; flask run --no-reload
 
 # run streamlit app
+streamlit app run
+
+# run all tests
+pytest

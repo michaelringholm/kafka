@@ -20,6 +20,7 @@ import emoji
 from kafka import KafkaProducer, KafkaAdminClient
 from kafka.admin import NewTopic
 from kafka.errors import TopicAlreadyExistsError, KafkaTimeoutError
+import depth_checker
 
 # --- Setup Logging with Emojis ---
 # Configure the logging format to include emojis for a more visual experience.
@@ -39,26 +40,10 @@ EMOJI_STOP = emoji.emojize(":chequered_flag:")
 EMOJI_CLOCK = emoji.emojize(":hourglass_done:")
 EMOJI_CONFIG = emoji.emojize(":gear:")
 
-def log_info(message):
-    """Log an informational message with an emoji."""
-    logging.info(f"{EMOJI_INFO} {message}")
-
-def log_success(message):
-    """Log a success message with an emoji."""
-    logging.info(f"{EMOJI_SUCCESS} {message}")
-
-def log_warning(message):
-    """Log a warning message with an emoji."""
-    logging.warning(f"{EMOJI_WARNING} {message}")
-
-def log_error(message):
-    """Log an error message with an emoji."""
-    logging.error(f"{EMOJI_ERROR} {message}")
-
-def kafka_producer_performance_test(
+def test_kafka_producer_performance(
     bootstrap_servers=['localhost:9092'],
     topic_name='perf-test',
-    num_messages=10000,
+    num_messages=1000,
     message_size_kb=1
 ):
     """
@@ -130,6 +115,7 @@ def kafka_producer_performance_test(
 
     # --- Performance Measurement ---
     start_time = time.time()
+    msg_count_before_produce = depth_checker.check_topic_depth(bootstrap_servers=bootstrap_servers, topic_name=topic_name)
     
     log_info(f"{EMOJI_START} Producing messages...")
     
@@ -170,13 +156,33 @@ def kafka_producer_performance_test(
     log_success(f"{EMOJI_CLOCK} Throughput: {throughput_mbps:,.2f} MB/sec")
 
     p.close()
+    msg_count_after_produce = depth_checker.check_topic_depth(bootstrap_servers=bootstrap_servers, topic_name=topic_name)
+    assert msg_count_after_produce-msg_count_before_produce == num_messages, f"Depth checker failed, got {msg_count_after_produce-msg_count_before_produce} messages, expected {num_messages} messages."
+
+#region logging
+def log_info(message):
+    """Log an informational message with an emoji."""
+    logging.info(f"{EMOJI_INFO} {message}")
+
+def log_success(message):
+    """Log a success message with an emoji."""
+    logging.info(f"{EMOJI_SUCCESS} {message}")
+
+def log_warning(message):
+    """Log a warning message with an emoji."""
+    logging.warning(f"{EMOJI_WARNING} {message}")
+
+def log_error(message):
+    """Log an error message with an emoji."""
+    logging.error(f"{EMOJI_ERROR} {message}")
+#endregion
 
 if __name__ == "__main__":
     # start by clearing the console log
     os.system('cls')
     # Example usage:
     # Test with 10,000 messages of 1 KB each
-    kafka_producer_performance_test(
+    test_kafka_producer_performance(
         num_messages=10,
         message_size_kb=10
     )

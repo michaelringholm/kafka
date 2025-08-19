@@ -1,34 +1,13 @@
 from flask import Flask, request, Response
 from kafka import KafkaProducer
 import lxml.etree as ET
-import logging
 from datetime import datetime
+import adapter_config_reader
+from logger_factory import create_logger
 
-# -----------------------------------
-# OPTIONS CONFIG CLASS
-# -----------------------------------
-class OPTIONS:
-    KAFKA_BROKER = "localhost:9092"
-    KAFKA_TOPIC = "quotes-topic"
-    XSD_SCHEMA_PATH = "sample_soap_schema.xsd"
-    XPATH_EXPR = "//m:StockName"  # Example: find StockName element
-    NAMESPACES = {"m": "https://www.example.org/stock"}  # Adjust to match your XML
-    HOST = "0.0.0.0"
-    PORT = 5000
-
-
-# -----------------------------------
-# LOGGING SETUP
-# -----------------------------------
-logging.basicConfig(
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    level=logging.INFO
-)
-# Silence kafka-python's noisy broker connection logs
-logging.getLogger("kafka").setLevel(logging.WARNING)
-log = logging.getLogger(__name__)
-
+log = create_logger(__name__)
 app = Flask(__name__)
+OPTIONS = adapter_config_reader.OPTIONS("config/stock_adapter_config.ini")
 
 def init_schema():
     schema_doc = ET.parse(OPTIONS.XSD_SCHEMA_PATH)

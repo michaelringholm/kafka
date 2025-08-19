@@ -2,13 +2,12 @@ from typing import Any
 import json
 import xmltodict
 from lxml import etree
+import transformations_config_reader
 
 class ContentFormatter:
     """Class to handle data format conversions between XML and JSON."""
 
-    TRANSFORMATIONS = {
-        'pro_trader': 'transformations/pro_trader_to_common.xslt'
-    }
+    TRANSFORMATIONS = transformations_config_reader.fetch_transformations()  # Fetch transformations from config
 
     @staticmethod
     def format_data(payload: str, source_format: str, dest_format: str) -> str:
@@ -50,11 +49,11 @@ class ContentFormatter:
             source_doc = etree.fromstring(payload)
             
             # Determine source format from root element
-            source_format = source_doc.tag
+            source_system = source_doc.tag
             
-            if source_format in ContentFormatter.TRANSFORMATIONS:
+            if source_system in ContentFormatter.TRANSFORMATIONS:
                 # Load appropriate XSLT
-                xslt_file = ContentFormatter.TRANSFORMATIONS[source_format]
+                xslt_file = ContentFormatter.TRANSFORMATIONS[source_system]
                 xslt_doc = etree.parse(xslt_file)
                 transform = etree.XSLT(xslt_doc)
                 
@@ -62,7 +61,7 @@ class ContentFormatter:
                 result_tree = transform(source_doc)
                 return etree.tostring(result_tree, pretty_print=True).decode()
             else:
-                raise ValueError(f"No transformation defined for source format: {source_format}")
+                raise ValueError(f"No transformation defined for source system: {source_system}")
                 
         except Exception as e:
             raise ValueError(f"XML transformation failed: {str(e)}")

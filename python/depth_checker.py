@@ -42,10 +42,7 @@ def log_error(message):
     """Log an error message with an emoji."""
     logging.error(f"{EMOJI_ERROR} {message}")
 
-def check_topic_depth(
-    bootstrap_servers=['localhost:9092'],
-    topic_name='perf-test'
-):
+def check_topic_depth(bootstrap_servers=['localhost:9092'],topic_name='perf-test'):
     """
     Checks the total number of messages (depth) in a Kafka topic.
     
@@ -137,6 +134,7 @@ def check_topic_depth(
             )
     else:
         log_info("  No partition details to display.")
+    return total_messages
 
 if __name__ == "__main__":
     # The topic name should match the one used by your producer script.

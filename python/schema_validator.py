@@ -1,3 +1,5 @@
+import os
+import emoji
 from lxml import etree
 
 def validate_xml_against_xsd(xml_string: str, xsd_path: str) -> bool:
@@ -41,17 +43,13 @@ def validate_xml_against_xsd(xml_string: str, xsd_path: str) -> bool:
         return False
 
 
-# Example usage:
-xml_example = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
-   <soapenv:Header/>
-   <soapenv:Body>
-      <m:GetPrice xmlns:m="https://www.example.org/stock">
-         <m:StockName>IBM</m:StockName>
-      </m:GetPrice>
-   </soapenv:Body>
-</soapenv:Envelope>"""
+if __name__ == "__main__":
+    # Example usage:
+    # Load a sample XML string and XSD file path from a file
+    os.system('cls' if os.name == 'nt' else 'clear')
+    with open("xml/sample_soap_client_request.xml", "r") as file:
+        xml_example = file.read()
 
-xsd_file_path = 'sample_soap_schema.xsd'
-
-is_valid = validate_xml_against_xsd(xml_example, xsd_file_path)
-print("Valid XML" if is_valid else "Invalid XML")
+    xsd_file_path = 'xml/sample_soap_schema.xsd'
+    is_valid = validate_xml_against_xsd(xml_example, xsd_file_path)
+    print(f"{emoji.emojize(":thumbs_up:")} Valid XML" if is_valid else f"{emoji.emojize(":thumbs_down:")} Invalid XML")

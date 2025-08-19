@@ -3,7 +3,9 @@ import threading
 from flask import Flask, request, Response
 from kafka import KafkaConsumer, KafkaProducer
 import lxml.etree as ET
-import routes_dac
+import logger_factory
+import route_config_reader
+#import routes_dac
 # import via local syntax for local py modules path thingy
 
 # =========================
@@ -12,20 +14,11 @@ import routes_dac
 class OPTIONS:
     KAFKA_BROKER = "localhost:9092"
     SOURCE_TOPIC = "quotes-topic"
-    ROUTING_MATRIX = routes_dac.fetch_routing_matrix() 
+    ROUTING_MATRIX = route_config_reader.fetch_routing_matrix() #routes_dac.fetch_routing_matrix() 
     FLASK_HOST = "0.0.0.0"
     FLASK_PORT = 5001
 
-# =========================
-# LOGGING SETUP
-# =========================
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
-logging.getLogger("kafka").setLevel(logging.WARNING)
-log = logging.getLogger(__name__)
-
+log = logger_factory.create_logger(__name__)
 app = Flask(__name__)
 
 # =========================
