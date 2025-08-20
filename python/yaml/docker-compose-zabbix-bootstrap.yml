@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  zabbix-appliance:
+    image: zabbix/zabbix-appliance:alpine-latest
+    container_name: zabbix-appliance
+    restart: unless-stopped
+    ports:
+      - "8080:8080"   # Web UI
+      - "10051:10051" # Zabbix server

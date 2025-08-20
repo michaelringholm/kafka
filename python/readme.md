@@ -18,11 +18,14 @@ pip install -r requirements.txt
 
 # run kafka
 # docker-compose up -d
-docker-compose -f docker-compose.yml up -d
+docker-compose -f yaml/docker-compose.yml up -d
 Make sure Kafka is running on localhost:9092
 
 # run postgres
-docker-compose -f docker-compose-postgres.yml up -d
+docker-compose -f yaml/docker-compose-postgres.yml up -d
+
+# run zabbix
+docker-compose -f yaml/docker-compose-zabbix-bootstrap.yml up -d
 
 # check it is running
 docker ps
@@ -30,7 +33,7 @@ docker ps
 run the app
 
 # build docker/podman image for flask app
-docker build -f soap_flask_adapter.Dockerfile -t soap-flask-adapter .
+docker build -f yaml/soap_flask_adapter.Dockerfile -t soap-flask-adapter .
 
 # run flask adapter
 $env:PYTHONPATH = "D:\github\kafka-demo\python"; $env:FLASK_APP = "stock_adapter.py"; flask run
