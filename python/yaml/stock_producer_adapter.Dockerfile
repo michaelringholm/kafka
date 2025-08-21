@@ -20,7 +20,7 @@ COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy your application files
-COPY stock_producer_adapter .
+COPY stock_producer_adapter.py .
 #COPY templates/ templates/
 #COPY static/ static/
 COPY xml/ xml/
