@@ -19,8 +19,8 @@ class OPTIONS:
         self.KAFKA_TOPIC = section.get("KAFKA_TOPIC")
         self.XSD_SCHEMA_PATH = section.get("XSD_SCHEMA_PATH")
         self.XPATH_EXPR = section.get("XPATH_EXPR")
-        self.HOST = section.get("HOST")
-        self.PORT = section.getint("PORT")
+        self.FLASK_HOST = section.get("FLASK_HOST")
+        self.FLASK_PORT = section.getint("FLASK_PORT")
         # Use ast.literal_eval to safely parse dictionary strings
         self.NAMESPACES = ast.literal_eval(section.get("NAMESPACES", "{}"))
         INFO(f"Loaded configuration from {section}")

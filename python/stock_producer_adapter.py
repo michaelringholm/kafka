@@ -7,7 +7,7 @@ from logger_factory import create_logger
 
 log = create_logger(__name__)
 app = Flask(__name__)
-OPTIONS = adapter_config_reader.OPTIONS("config/stock_adapter_config.ini")
+OPTIONS = adapter_config_reader.OPTIONS("config/stock_producer_adapter_config.ini")
 
 def init_schema():
     schema_doc = ET.parse(OPTIONS.XSD_SCHEMA_PATH)
@@ -15,7 +15,7 @@ def init_schema():
 
 @app.before_request
 def create_app():
-    log.info("🚀 Initializing Flask SOAP adapter on before_request signal...")
+    log.info("🚀 Initializing Flask SOAP stock consumer adapter on before_request signal...")
     init_schema()
     app.producer = KafkaProducer(
         bootstrap_servers=OPTIONS.KAFKA_BROKER,
@@ -77,6 +77,6 @@ def soap_receive():
 # ENTRY POINT
 # -----------------------------------
 if __name__ == "__main__":
-    log.info(f"🚀 Starting Flask SOAP adapter on {OPTIONS.HOST}:{OPTIONS.PORT}")
+    log.info(f"🚀 Starting Flask SOAP stock consumer adapter on {OPTIONS.FLASK_HOST}:{OPTIONS.FLASK_PORT}")
     create_app()
-    app.run(host=OPTIONS.HOST, port=OPTIONS.PORT)
+    app.run(host=OPTIONS.FLASK_HOST, port=OPTIONS.FLASK_PORT)

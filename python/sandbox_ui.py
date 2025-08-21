@@ -4,8 +4,8 @@ from kafka.errors import KafkaError
 import time
 
 from streamlit.delta_generator import DeltaGenerator
-from consumer_performance import kafka_consumer_performance_test
-from producer_perfomance import kafka_producer_performance_test
+from tests.consumer_performance_test import kafka_consumer_performance_test
+from tests.producer_perfomance_test import kafka_producer_performance_test
 import sample_soap_client
 
 # Configuration

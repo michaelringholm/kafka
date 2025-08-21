@@ -20,16 +20,17 @@ COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy your application files
-COPY soap_flask_adapter.py .
+COPY stock_producer_adapter .
 #COPY templates/ templates/
 #COPY static/ static/
-#COPY config/ config/
+COPY xml/ xml/
+COPY config/stock_producer_adapter_config.ini config/stock_producer_adapter_config.ini
 
 # Expose the port your Flask app runs on
 EXPOSE 5000
 
 # Set environment variables
-ENV FLASK_APP=soap_flask_adapter.py
+ENV FLASK_APP=stock_producer_adapter
 ENV FLASK_ENV=production
 ENV PYTHONUNBUFFERED=1
 
