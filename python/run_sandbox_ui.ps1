@@ -1,0 +1,1 @@
+streamlit run sandbox_ui.py --server.address localhost --server.port 5051

@@ -1,1 +1,0 @@
-streamlit run kafka_explorer.py --server.address localhost --server.port 5051

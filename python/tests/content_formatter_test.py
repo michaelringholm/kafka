@@ -1,7 +1,6 @@
-import os
-import sys
 from xmldiff import main as xmldiff
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from logger_factory import create_logger
+from protocols.app_logger import AppLogger
 from content_formatter import ContentFormatter
 import pytest
 
@@ -17,6 +16,8 @@ def test_format_json_to_xml():
     assert "<element>value</element>" in result
 
 def test_map_xml_to_xml():
+    logger:AppLogger = create_logger("test_logger")
+    logger.info("Starting test_map_xml_to_xml")
     source_xml_payload = "<pro_trader><trade><trader>JCOOK</trader><trade_id>10090</trade_id><ccy>SEK</ccy></trade></pro_trader>"
     result = ContentFormatter._map_xml_to_xml(source_xml_payload)
     expected = "<common_trade><currency_code>SEK</currency_code></common_trade>"
